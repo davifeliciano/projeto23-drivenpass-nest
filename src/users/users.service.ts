@@ -8,7 +8,7 @@ export class UsersService {
 
   async create(email: string, password: string) {
     try {
-      return this.usersRepository.create(email, password);
+      return await this.usersRepository.create(email, password);
     } catch (err) {
       if (
         err instanceof PrismaClientKnownRequestError &&
@@ -20,10 +20,10 @@ export class UsersService {
   }
 
   async findByEmail(email: string) {
-    return this.usersRepository.findByEmail(email);
+    return await this.usersRepository.findByEmail(email);
   }
 
   async remove(id: number) {
-    return this.usersRepository.remove(id);
+    return await this.usersRepository.remove(id);
   }
 }
