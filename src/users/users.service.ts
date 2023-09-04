@@ -1,25 +1,29 @@
-import { Injectable } from '@nestjs/common';
-import { RegisterDto } from 'src/auth/dto/register.dto';
+import { ConflictException, Injectable } from '@nestjs/common';
+import { UsersRepository } from './users.repository';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 @Injectable()
 export class UsersService {
-  create(createUserDto: RegisterDto) {
-    return 'This action adds a new user';
+  constructor(private readonly usersRepository: UsersRepository) {}
+
+  async create(email: string, password: string) {
+    try {
+      return this.usersRepository.create(email, password);
+    } catch (err) {
+      if (
+        err instanceof PrismaClientKnownRequestError &&
+        err.code === 'P2002'
+      ) {
+        throw new ConflictException('Account already exists');
+      }
+    }
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findByEmail(email: string) {
+    return this.usersRepository.findByEmail(email);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
-  }
-
-  update(id: number, updateUserDto: RegisterDto) {
-    return `This action updates a #${id} user`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number) {
+    return this.usersRepository.remove(id);
   }
 }

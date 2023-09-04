@@ -9,7 +9,14 @@ import { NotesModule } from './notes/notes.module';
 import { CardsModule } from './cards/cards.module';
 
 @Module({
-  imports: [PrismaModule, AuthModule, UsersModule, CredentialsModule, NotesModule, CardsModule],
+  imports: [
+    PrismaModule,
+    AuthModule,
+    UsersModule,
+    CredentialsModule,
+    NotesModule,
+    CardsModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
